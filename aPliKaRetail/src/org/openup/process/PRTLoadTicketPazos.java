@@ -425,6 +425,10 @@ public class PRTLoadTicketPazos extends SvrProcess {
 										ahora.setProcessed(true);
 										ahora.setDescription("Archivo procesado exitosamente!!");
 										ahora.saveEx();
+
+										/*
+										 * COMENTA GABRIEL YA QUE NO FUNCIONA POR: 
+										 * MScheduler[1000006-UY_Sch_PRTLoadTicket] - Table Name Not Found - AD_Client Logs deleted=1"
 										//SBT Issue #8238 09/02/2017
 										//Se crean salidas y entradas de stock por ventas y devoluciones  
 										log.log(Level.SEVERE, "INI Mov. Stock:"+new Timestamp (System.currentTimeMillis()).toString());
@@ -432,6 +436,9 @@ public class PRTLoadTicketPazos extends SvrProcess {
 										prs.execute();
 //										model.setProcessed(true);
 //										model.saveEx();
+										*/
+										
+										
 										log.log(Level.SEVERE, "FIN Proceso lectura SalidaPazos!!"+new Timestamp (System.currentTimeMillis()).toString());
 				
 									} catch (IOException e) {

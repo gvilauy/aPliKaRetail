@@ -31,7 +31,9 @@ import org.openup.model.MFamilia;
 import org.openup.model.MProductGroup;
 import org.openup.model.MRTInterfaceProd;
 import org.openup.model.MRTInterfaceScales;
+import org.openup.model.MRTSendPosLog;
 import org.openup.model.MSubFamilia;
+import org.openup.model.X_UY_RT_SendPosLog;
 import org.openup.util.OpenUpUtils;
 
 /**OpenUp Ltda Issue#
@@ -180,6 +182,8 @@ public class PRTInterfaceScales extends SvrProcess {
 	@Override
 	protected String doIt() throws Exception {
 		
+		Timestamp today = TimeUtil.trunc(new Timestamp (System.currentTimeMillis()), TimeUtil.TRUNC_DAY);
+		
 		String[] hra = (new Timestamp (System.currentTimeMillis()).toString().split(SEPARATOR_L));
 		String fecha =hra[0].replace("-", "").replace(" ", "_")+hra[1];
 		fchToday = fecha;
@@ -198,6 +202,13 @@ public class PRTInterfaceScales extends SvrProcess {
 					count++;
 				}else{
 					countError++;
+					
+					MRTSendPosLog spl = new MRTSendPosLog(Env.getCtx(), 0, null);
+					spl.setM_Product_ID(row.getM_Product_ID());
+					spl.setDateTrx(today);
+					spl.setSourceType(X_UY_RT_SendPosLog.SOURCETYPE_BALANZA);
+					spl.saveEx();
+					
 				}	
 			}
 			if(count>0){

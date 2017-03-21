@@ -10,7 +10,10 @@ import java.util.List;
 import org.adempiere.exceptions.AdempiereException;
 import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
+import org.compiere.util.TimeUtil;
 import org.openup.model.MRTInterfaceProd;
+import org.openup.model.MRTSendPosLog;
+import org.openup.model.X_UY_RT_SendPosLog;
 import org.openup.retail.MRTScanntech;
 
 /**OpenUp Ltda Issue#
@@ -80,6 +83,9 @@ public class PRTUpdatePrice extends SvrProcess {
 	protected String doIt() throws Exception {
 		int good = 0; int error = 0; int prodAux = 0;
 		String scales = "";
+		
+		Timestamp today = TimeUtil.trunc(new Timestamp (System.currentTimeMillis()), TimeUtil.TRUNC_DAY);
+		
 		//Obtengo los datos sin leer si la sucursal es cero se traen todos los precios a actualizar si la sucursal tiene 
 		//valor se retornan solo los datos a actualizar para dicha sucursal
 		List<MRTInterfaceProd> datos = MRTInterfaceProd.forPriceManualNotRead(getCtx(),this.sucursal,get_TrxName());
@@ -108,6 +114,13 @@ public class PRTUpdatePrice extends SvrProcess {
 						if(prodAux == 0 || prodAux!=prodPric.getM_Product_ID() ){
 							prodAux = prodPric.getM_Product_ID();
 							error++;
+							
+							MRTSendPosLog spl = new MRTSendPosLog(getCtx(), 0, get_TrxName());
+							spl.setM_Product_ID(prodPric.getM_Product_ID());
+							spl.setDescription(retorno);
+							spl.setDateTrx(today);
+							spl.setSourceType(X_UY_RT_SendPosLog.SOURCETYPE_POS);
+							spl.saveEx();
 						}
 					}
 				}

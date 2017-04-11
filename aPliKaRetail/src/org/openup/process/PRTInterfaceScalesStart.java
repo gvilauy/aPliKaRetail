@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
 import java.sql.PreparedStatement;
@@ -372,6 +373,12 @@ public class PRTInterfaceScalesStart extends SvrProcess {
 		//Escritura
 		if(null!=f){
 			try{
+				
+				bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fBatch, continuo), "ISO-8859-15"));
+				bw.append(lineIn);
+
+				/*
+				
 				//FileWriter w = new FileWriter(f,continuo); 
 				//SBT 19/09/2016 Issue #7051 se agrega codificacion ya que por defecto crea con ISO-8859-1
 			//	MClient clte = new MClient(getCtx(),this.getAD_Client_ID(),get_TrxName());
@@ -383,6 +390,9 @@ public class PRTInterfaceScalesStart extends SvrProcess {
 					bw = new BufferedWriter(w);
 				//}
 				bw.append(lineIn);
+				
+				*/
+				
 			}catch(IOException e){
 				e.printStackTrace();
 			}catch(Exception e){
